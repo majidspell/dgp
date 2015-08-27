@@ -38,7 +38,7 @@
         </div><!-- /.box-body -->
 
         <div class="box-footer">
-            <button type="button" onclick="simpan_kategori()" class="btn btn-primary">Simpan</button>
+            <button type="button" onclick="simpan_kategori()" class="btn btn-primary act-simpan">Simpan</button>
             <?php
             echo anchor('admin/kategori', 'Kembali', array('class' => 'btn btn-primary'));
             ?>
@@ -54,18 +54,21 @@
                     var nama_kategori = $("#nama_kategori").val();
                     var link = $("#link").val();
                     var parent = $("#parent").val();
+                    var actSimpan = $(".act-simpan");
+                    actSimpan.button('loading');
 
                     $.ajax({
                         url: "<?php echo site_url(); ?>admin/kategori/validate",
                         type: "post",
                         data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
-                        datatype: "json",
+                        dataType: "json",
                         success: function(data) {
                             if (data.correct == "salah") {
                                 $("#message_nama_kategori").html(data.message_nama_kategori);
                                 $("#message_link").html(data.message_link);
                                 $("#message_parent").html(data.message_parent);
                             }
+                            actSimpan.button('reset');
                         }
                     });
                     return false;
