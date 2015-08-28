@@ -3,7 +3,7 @@
         <h3 class="box-title">Quick Example</h3>
     </div><!-- /.box-header -->
     <!-- form start -->
-    <form role="form">
+    <form role="form" onsubmit="simpan_kategori();return false;">
         <div class="box-body">
             <div class="form-group">
                 <label>Nama Kategori</label>
@@ -38,7 +38,7 @@
         </div><!-- /.box-body -->
 
         <div class="box-footer">
-            <button type="button" onclick="simpan_kategori()" class="btn btn-primary act-simpan">Simpan</button>
+            <button type="submit" class="btn btn-primary act-simpan">Simpan</button>
             <?php
             echo anchor('admin/kategori', 'Kembali', array('class' => 'btn btn-primary'));
             ?>
