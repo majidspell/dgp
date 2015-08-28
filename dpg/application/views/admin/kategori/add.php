@@ -3,8 +3,12 @@
         <h3 class="box-title">Quick Example</h3>
     </div><!-- /.box-header -->
     <!-- form start -->
+<<<<<<< HEAD
     <form role="form" onsubmit="simpan_kategori();
             return false;">
+=======
+    <form role="form" onsubmit="simpan_kategori();return false;">
+>>>>>>> df576eea1845fc212f3e0b5aa834924a075a2ee6
         <div class="box-body">
             <div class="form-group">
                 <label>Nama Kategori</label>
@@ -65,6 +69,7 @@
             });
         }
 
+<<<<<<< HEAD
         function simpan_kategori() {
             var nama_kategori = $("#nama_kategori").val();
             var link = $("#link").val();
@@ -86,6 +91,43 @@
                         return simpan();    
                     }
                     actSimpan.button('reset');
+=======
+                function simpan_kategori() {
+                    var nama_kategori = $("#nama_kategori").val();
+                    var link = $("#link").val();
+                    var parent = $("#parent").val();
+                    var actSimpan = $(".act-simpan");
+                    actSimpan.button('loading');
+
+                    $.ajax({
+                        url: "<?php echo site_url(); ?>admin/kategori/validate",
+                        type: "post",
+                        data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.correct == "salah") {
+                                $("#message_nama_kategori").html(data.message_nama_kategori);
+                                $("#message_link").html(data.message_link);
+                                $("#message_parent").html(data.message_parent);
+                            }
+                            actSimpan.button('reset');
+                        }
+                    });
+                    return false;
+//                    
+//                    if (parent === "" || link == "" || nama_kategori == "") {
+//                        alert("silahkan isi semua data yang dibutuhkan");
+//                    } else {
+//                        $.ajax({
+//                            type: "post",
+//                            url: "<?php echo site_url(); ?>admin/kategori/insert",
+//                            data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
+//                            success: function(data) {
+//                                alert(data);
+//                            }
+//                        });
+//                    }
+>>>>>>> df576eea1845fc212f3e0b5aa834924a075a2ee6
                 }
             });
         }
