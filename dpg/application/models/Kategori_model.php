@@ -42,7 +42,9 @@ class Kategori_model extends CI_Model {
             $data = array(
                 'correct' => 'benar'
             );
-            echo json_encode($data);
+            /* ini returny jgn langsung json */
+            //echo json_encode($data);
+            return $data;
         }
     }
 

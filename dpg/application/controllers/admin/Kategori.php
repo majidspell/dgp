@@ -18,11 +18,17 @@ class Kategori extends CI_Controller {
     }
 
     function insert() {
-        $this->kategori_model->insert();
+        $validate = $this->validate();
+        if($validate['correct']=='benar'){
+            /*sai: yg ini lanjutkan sendiri, cek insertny bener apa ngg*/
+            $this->kategori_model->insert();
+        }else{
+            json_encode($validate);
+        }
     }
 
     function validate() {
-        $this->kategori_model->validate();
+        return $this->kategori_model->validate();
     }
 
 //    function post() {

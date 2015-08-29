@@ -49,21 +49,21 @@
 
 
 <script type="text/javascript">
-        function simpan() {
-            var nama_kategori = $("#nama_kategori").val();
-            var link = $("#link").val();
-            var parent = $("#parent").val();
-            var actSimpan = $(".act-simpan");
-            actSimpan.button('loading');
-            $.ajax({
-                type: "post",
-                url: "<?php echo site_url(); ?>admin/kategori/insert",
-                data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
-                success: function(data) {
-                    alert(data);
-                }
-            });
-        }
+//        function simpan() {
+//            var nama_kategori = $("#nama_kategori").val();
+//            var link = $("#link").val();
+//            var parent = $("#parent").val();
+//            var actSimpan = $(".act-simpan");
+//            actSimpan.button('loading');
+//            $.ajax({
+//                type: "post",
+//                url: "<?php //echo site_url(); ?>//admin/kategori/insert",
+//                data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
+//                success: function(data) {
+//                    alert(data);
+//                }
+//            });
+//        }
 
         function simpan_kategori() {
             var nama_kategori = $("#nama_kategori").val();
@@ -71,8 +71,10 @@
             var parent = $("#parent").val();
             var actSimpan = $(".act-simpan");
             actSimpan.button('loading');
+            /* sai: ajax ini selain memvalidasi juga menyimpan */
+            /* sai: admin/kategori/validate -> admin/kategori/insert */
             $.ajax({
-                url: "<?php echo site_url(); ?>admin/kategori/validate",
+                url: "<?php echo site_url(); ?>admin/kategori/insert",
                 type: "post",
                 data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
                 dataType: "json",
@@ -83,7 +85,8 @@
                         $("#message_parent").html(data.message_parent);
                      
                     } else if (data.correct == "benar") {
-                        return simpan();    
+                        /* sai: ini harusny ng perlu kan */
+                        //return simpan();
                     }
                     actSimpan.button('reset');
                 }
