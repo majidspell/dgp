@@ -18,13 +18,20 @@ class Kategori extends CI_Controller {
     }
 
     function insert() {
-        $validate = $this->validate();
-        if($validate['correct']=='benar'){
-            /*sai: yg ini lanjutkan sendiri, cek insertny bener apa ngg*/
-            $this->kategori_model->insert();
-        }else{
-            json_encode($validate);
-        }
+            $this->form_validation->set_rules('nama_kategori', 'Nama_kategori', 'trim|required');
+            $this->form_validation->set_rules('link', 'Link', 'trim|required|valid_url');
+            $this->form_validation->set_rules('parent', 'Parent', 'required');
+            if ($this->form_validation->run() === FALSE) {
+                $data = array(
+                    'correct' => 'salah',
+                    'message_nama_kategori' => form_error('nama_kategori'),
+                    'message_link' => form_error('link'),
+                    'message_parent' => form_error('parent')
+                );
+                echo json_encode($data);
+            } else {
+                $this->kategori_model->insert();
+            }
     }
 
     function validate() {
