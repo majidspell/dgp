@@ -26,28 +26,6 @@ class Kategori_model extends CI_Model {
         }
     }
 
-    function validate() {
-        $this->form_validation->set_rules('nama_kategori', 'Nama_kategori', 'required');
-        $this->form_validation->set_rules('link', 'Link', 'required|valid_url');
-        $this->form_validation->set_rules('parent', 'Parent', 'required');
-        if ($this->form_validation->run() === FALSE) {
-            $data = array(
-                'correct' => 'salah',
-                'message_nama_kategori' => form_error('nama_kategori'),
-                'message_link' => form_error('link'),
-                'message_parent' => form_error('parent')
-            );
-            echo json_encode($data);
-        } else {
-            $data = array(
-                'correct' => 'benar'
-            );
-            /* ini returny jgn langsung json */
-            //echo json_encode($data);
-            return $data;
-        }
-    }
-
     function update() {
         $data = array(
             'nama_kategori' => $this->input->post('nama_kategori'),
