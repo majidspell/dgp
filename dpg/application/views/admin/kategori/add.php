@@ -81,7 +81,9 @@
                         $("#message_nama_kategori").html(data.message_nama_kategori);
                         $("#message_link").html(data.message_link);
                         $("#message_parent").html(data.message_parent);
-                    } 
+                    }else{
+                        alert(data);
+                    }
                     actSimpan.button('reset');
                 }
             });
