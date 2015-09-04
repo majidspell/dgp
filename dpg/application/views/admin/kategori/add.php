@@ -75,7 +75,7 @@
                 url: "<?php echo site_url(); ?>admin/kategori/insert",
                 type: "post",
                 data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
-                dataType: "json",
+                dataType: "json", // sai: -> padahal di sini kmu set kamu hanya menerima json
                 success: function(data) {
                     if (data.correct == "salah") {
                         $("#message_nama_kategori").html(data.message_nama_kategori);
@@ -86,6 +86,11 @@
                     }
                     actSimpan.button('reset');
                 }
+            }).fail(function( data ) {
+               // sai: nah ini data setelah berhasil tidak perupa json
+                // sai : tapi hanya string "data berhasil disimpan"
+                console.log(data);
+                actSimpan.button('reset'); // untuk mengembalikan tombol ketika hasil ajax tidak valid
             });
         }
 
