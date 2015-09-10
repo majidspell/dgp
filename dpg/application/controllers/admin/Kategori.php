@@ -18,25 +18,25 @@ class Kategori extends CI_Controller {
     }
 
     function insert() {
-            $this->form_validation->set_rules('nama_kategori', 'Nama_kategori', 'trim|required');
-            $this->form_validation->set_rules('link', 'Link', 'trim|required|valid_url');
-            $this->form_validation->set_rules('parent', 'Parent', 'required');
-            if ($this->form_validation->run() === FALSE) {
-                $data = array(
-                    'correct' => 'salah',
-                    'message_nama_kategori' => form_error('nama_kategori'),
-                    'message_link' => form_error('link'),
-                    'message_parent' => form_error('parent')
-                );
-                echo json_encode($data);
-            } else {
-                $this->kategori_model->insert();
-            }
+        $this->form_validation->set_rules('nama_kategori', 'Nama_kategori', 'trim|required');
+        $this->form_validation->set_rules('link', 'Link', 'trim|required|valid_url');
+        $this->form_validation->set_rules('parent', 'Parent', 'required|in_list[0,1]');
+        if ($this->form_validation->run() == FALSE) {
+            $data = array(
+                'correct' => 'salah',
+                'message_nama_kategori' => form_error('nama_kategori'),
+                'message_link' => form_error('link'),
+                'message_parent' => form_error('parent')
+            );
+            echo json_encode($data);
+        } else {
+            $this->kategori_model->insert();
+        }
     }
 
-    function validate() {
-        return $this->kategori_model->validate();
-    }
+//    function validate() {
+//        return $this->kategori_model->validate();
+//    }
 
 //    function post() {
 //        if (isset($_POST['submit'])) {
@@ -54,8 +54,8 @@ class Kategori extends CI_Controller {
             redirect('admin/kategori');
         } else {
             $id = $this->uri->segment(4);
+            $data['row'] = $this->db->get_where('kategori', array('kategori_id'=>$id))->row_array();
             $data['parent'] = $this->kategori_model->select_parent()->result();
-            $data['row'] = $this->kategori_model->get_kategori_id($id)->row_array();
             $this->template->load('dashboard', 'admin/kategori/edit', $data);
         }
     }
@@ -65,9 +65,6 @@ class Kategori extends CI_Controller {
         $this->kategori_model->delete($id);
     }
 
-//    function delete() {
-//        $this->db->where('kategori_id', $this->uri->segment(4));
-//        $this->db->delete('kategori');
 //        redirect('admin/kategori');
 //    }
 }
