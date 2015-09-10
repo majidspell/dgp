@@ -1,9 +1,6 @@
 <div class="box box-primary">
-    <div class="box-header">
-        <h3 class="box-title">Quick Example</h3>
-    </div><!-- /.box-header -->
     <!-- form start -->
-    <form role="form" onsubmit="simpan_kategori();
+    <form  id="kategoriForm" role="form" onsubmit="simpan_kategori();
             return false;">
         <div class="box-body">
             <div class="form-group">
@@ -17,17 +14,16 @@
                 <span id="message_link" class="text-red"></span>
             </div>
             <div class="form-group">
-                <label>Parent</label>
+                <label>Kategori Menu Parent</label>
                 <select name="parent" class="form-control" id="parent">
                     <?php
                     if (count($parent) > 0) {
                         ?>
-
                         <option value = "">--pilih parent--</option>
-                        <option value = 0>Menu Parent</option>
+                        <option value ="0">Menu Parent</option>
                         <?php
                         foreach ($parent as $p) {
-                            echo "<option value = $p->kategori_id>$p->nama_kategori</option>";
+                            echo "<option value = '$p->kategori_id'>$p->nama_kategori</option>";
                         }
                     } else {
                         echo "<option>--Data Belum Tersedia--</option>";
@@ -49,22 +45,6 @@
 
 
 <script type="text/javascript">
-//        function simpan() {
-//            var nama_kategori = $("#nama_kategori").val();
-//            var link = $("#link").val();
-//            var parent = $("#parent").val();
-//            var actSimpan = $(".act-simpan");
-//            actSimpan.button('loading');
-//            $.ajax({
-//                type: "post",
-//                url: "<?php echo site_url(); ?>admin/kategori/insert",
-//                data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
-//                success: function(data) {
-//                    alert(data);
-//                }
-//            });
-//        }
-
         function simpan_kategori() {
             var nama_kategori = $("#nama_kategori").val();
             var link = $("#link").val();
@@ -75,23 +55,27 @@
                 url: "<?php echo site_url(); ?>admin/kategori/insert",
                 type: "post",
                 data: "nama_kategori=" + nama_kategori + "&link=" + link + "&parent=" + parent,
-                dataType: "json", // sai: -> padahal di sini kmu set kamu hanya menerima json
+                dataType: "json",
                 success: function(data) {
                     if (data.correct == "salah") {
                         $("#message_nama_kategori").html(data.message_nama_kategori);
                         $("#message_link").html(data.message_link);
                         $("#message_parent").html(data.message_parent);
-                    }else{
-                        alert(data);
+                    } else {
+                        alert(data.message1);
+                        $("#message_nama_kategori").html("");
+                        $("#message_link").html("");
+                        $("#message_parent").html("");
+                        $("#kategoriForm")[0].reset();
                     }
                     actSimpan.button('reset');
                 }
-            }).fail(function( data ) {
-               // sai: nah ini data setelah berhasil tidak perupa json
-                // sai : tapi hanya string "data berhasil disimpan"
-                console.log(data);
-                actSimpan.button('reset'); // untuk mengembalikan tombol ketika hasil ajax tidak valid
-            });
+            }
+//            ).fail(function(data) {
+//                console.log(data)
+//                actSimpan.button('reset');
+//            }
+            );
         }
 
 </script>
