@@ -1,12 +1,12 @@
 <link href="<?php echo base_url() ?>template/adminlte/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 <div class="box" id="kategoriresult">
     <div class="box-header">
-        <h3 class="box-title">Data Table With Full Features</h3>
+        <div><?php
+            echo anchor('admin/kategori/add', 'Input Kategori', array('class' => 'btn btn-primary btn-sm'));
+            ?></div>
     </div><!-- /.box-header -->
-    &nbsp;&nbsp;&nbsp;
-    <?php
-    echo anchor('admin/kategori/add', 'Input Kategori', array('class' => 'btn btn-primary btn-sm'));
-    ?>
+    <!--&nbsp;&nbsp;&nbsp;-->
+
     <div class="box-body">
         <table id="example1" class="table table-bordered table-striped">
             <thead>
@@ -14,7 +14,6 @@
                     <th>No</th>
                     <th>Nama Kategori</th>
                     <th>Jenis Menu</th>
-                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -30,11 +29,10 @@
                     if ($r->parent == 0) {
                         echo "Menu Parent";
                     } else {
-                        $jenisparent = $this->db->get_where('kategori', array('parent' => $r->parent))->row_array();
-                        echo $jenisparent['nama_kategori'];
+                        $jenisparent = $this->db->get_where('kategori', array('kategori_id' => $r->kategori_id))->row_array();
+                        echo $jenisparent['nama_kategori'].' (Sub Menu)';
                     }
                     echo"</td>
-                                <td></td>
                                 <td width='10'>" . anchor("admin/kategori/edit/" . $r->kategori_id, "<i class='fa fa-trash'>", array('title' => 'edit data')) . "</td>
                                 <td width='10'><p class='fa fa-trash' title='hapus data' onclick='deletekat($r->kategori_id)'><p> </td>
                           </tr>       
