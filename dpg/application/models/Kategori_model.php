@@ -19,10 +19,16 @@ class Kategori_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $this->db->where('nama_kategori', $data['nama_kategori']);
             $this->db->update('kategori', $data);
-            echo "data berhasil diupdate";
+            $pesan = array(
+                'message1' => 'data berhasil diupdate'
+            );
+            echo json_encode($pesan);
         } else {
             $this->db->insert('kategori', $data);
-            echo "data berhasil disimpan";
+            $pesan = array(
+                'message1' => 'data berhasil disimpan'
+            );
+            echo json_encode($pesan);
         }
     }
 
