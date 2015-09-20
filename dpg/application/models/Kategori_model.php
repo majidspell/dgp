@@ -19,30 +19,16 @@ class Kategori_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $this->db->where('nama_kategori', $data['nama_kategori']);
             $this->db->update('kategori', $data);
-            echo "data berhasil diupdate";
+            $pesan = array(
+                'message1' => 'data berhasil diupdate'
+            );
+            echo json_encode($pesan);
         } else {
             $this->db->insert('kategori', $data);
-            echo "data berhasil disimpan";
-        }
-    }
-
-    function validate() {
-        $this->form_validation->set_rules('nama_kategori', 'Nama_kategori', 'required');
-        $this->form_validation->set_rules('link', 'Link', 'required|valid_url');
-        $this->form_validation->set_rules('parent', 'Parent', 'required');
-        if ($this->form_validation->run() === FALSE) {
-            $data = array(
-                'correct' => 'salah',
-                'message_nama_kategori' => form_error('nama_kategori'),
-                'message_link' => form_error('link'),
-                'message_parent' => form_error('parent')
+            $pesan = array(
+                'message1' => 'data berhasil disimpan'
             );
-            echo json_encode($data);
-        } else {
-            $data = array(
-                'correct' => 'benar'
-            );
-            echo json_encode($data);
+            echo json_encode($pesan);
         }
     }
 
