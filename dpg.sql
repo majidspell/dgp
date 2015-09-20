@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 27, 2015 at 01:32 PM
+-- Generation Time: Sep 21, 2015 at 12:33 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -33,22 +33,17 @@ CREATE TABLE IF NOT EXISTS `kategori` (
   `parent` int(11) NOT NULL,
   `nama_kategori_seo` varchar(100) NOT NULL,
   PRIMARY KEY (`kategori_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=40 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=69 ;
 
 --
 -- Dumping data for table `kategori`
 --
 
 INSERT INTO `kategori` (`kategori_id`, `nama_kategori`, `link`, `parent`, `nama_kategori_seo`) VALUES
-(1, '40x40', '40x40', 0, '0'),
-(2, '60x60', '60x60', 0, '0'),
-(3, '5555', '5555', 0, '5555'),
-(4, '6666', '6666', 1, '6666'),
-(11, '5555', '5555', 0, '5555'),
-(14, '1', '2', 1, '1'),
-(34, '666', '666', 1, '666'),
-(38, '', '', 0, ''),
-(39, '[object HTMLInputElement]', '[object HTMLInputElement]', 0, 'object-htmlinputelement');
+(2, '60x60', 'dpg/60x60', 0, '60x60'),
+(62, '40x40', 'dpg/40x40', 1, '40x40'),
+(67, 'cutting', 'dpg/sorentobrown', 1, 'cutting'),
+(68, 'reject', 'dpg/reject', 0, 'reject');
 
 -- --------------------------------------------------------
 
@@ -119,9 +114,21 @@ CREATE TABLE IF NOT EXISTS `product` (
   `nama_product` varchar(100) NOT NULL,
   `nama_product_seo` varchar(140) NOT NULL,
   `harga` int(11) NOT NULL,
+  `picture` text NOT NULL,
   `kategori_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`product_id`, `nama_product`, `nama_product_seo`, `harga`, `picture`, `kategori_id`) VALUES
+(1, 'sorento beige', 'sorento-beige', 100000, '', 2),
+(3, 'artic white', 'artic-white', 50000, '', 67),
+(4, 'spektrum white', 'spektrum-white', 12000, '', 62),
+(7, 'honolulu grey', 'honolulu-grey', 10000, '', 2),
+(11, 'spektrum grey', 'spektrum-grey', 13000, '', 62);
 
 -- --------------------------------------------------------
 
