@@ -1,7 +1,6 @@
 <div class="box box-primary">
     <!-- form start -->
-    <form  id="productForm" role="form" onsubmit="simpan_product();
-            return false;" method="post" enctype="multipart/form-data">
+    <form role="form" id="productForm">
         <div class="box-body">
             <div class="form-group">
                 <label>Nama Product</label>
@@ -33,13 +32,13 @@
             </div>
             <div class="form-group">
                 <label>Silahkan Pilih File Gambar</label>
-                <input type="file" name="userfile" id="userfile">
-                <span id="message_userfile" class="text-red"></span>
+                <input type="file" id="gambar" name="gambar"/>
+                <span id="message_gambar" class="text-red"></span>
             </div>
         </div><!-- /.box-body -->
 
         <div class="box-footer">
-            <button type="submit" class="btn btn-primary act-simpan">Simpan</button>
+            <button  id="button_submit" type="submit" class="btn btn-primary act-simpan">Simpan</button>
             <?php
             echo anchor('admin/product', 'Kembali', array('class' => 'btn btn-primary'));
             ?>
@@ -47,68 +46,54 @@
     </form>
 </div><!-- /.box -->
 
-<script src="<?php echo base_url() ?>assets/js/jquery.form.js" type="text/javascript"></script>
+<!--<script src="<?php echo base_url() ?>assets/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>-->
 <script type="text/javascript">
-//        function simpanfoto() {
-//
-//
-//            $('#uploadfotopasien').ajaxForm({
-//                success: function(resp) {
-//                    // Setelah eksekusi sukses maka diberikan hasil dari eksekusi dan detail pesannya
-//                    $('.hasil').html(resp);
-//                },
-//            });
-//        }
-//        ;
-///////////////////////////////////////////////////////////////////////////////////////////////
-        function simpan_product() {
-            var nama_product = $("#nama_product").val();
-            var harga = $("#harga").val();
-            var kategori = $("#kategori").val();
-            var userfile = $('#userfile').val(); // Nama control file yang nantinya akan mengupload file
+    jQuery(document).ready(function() {
+        jQuery("#productForm").submit(function() {
+            var pict = $("#gambar").val();
             var actSimpan = $(".act-simpan");
             actSimpan.button('loading');
-            $.ajax({
+            jQuery.ajax({
                 url: "<?php echo site_url(); ?>admin/product/insert",
                 type: "post",
-                data: "&nama_product=" + nama_product + "&harga=" + harga + "&kategori=" + kategori + "&userfile=" + userfile,
                 dataType: "json",
-                beforeSend: function() {
-                    // Dieksekusi sebelum upload dilakukan, mengeset label msg
-                    var percentVal = 'Mengupload 0%';
-                    $('#message_userfile').html(percentVal);
-                },
-                uploadProgress: function(event, position, total, percentComplete) {
-                    // Dieksekusi pada saat upload dilakukan, menampilkan persentase progress upload ke label msg
-                    var percentVal = 'Mengupload ' + percentComplete + '%';
-                    $('#message_userfile').html(percentVal);
-                },
-                beforeSubmit: function() {
-                    // Sebelum form di submit
-                    $('#message_userfile').html('Silahkan Tunggu ... ');
+                contentType: false,
+                processData: false,
+                data: function() {
+                    var data = new FormData();
+                    data.append("nama_product", jQuery("#nama_product").val());
+                    data.append("harga", jQuery("#harga").val());
+                    data.append("kategori", jQuery("#kategori").val());
+                    data.append("gambar", jQuery("#gambar").get(0).files[0]);
+                    return data;
+                    //return new FormData(jQuery("form")[0]);
+                }(),
+                error: function(_, textStatus, errorThrown) {
+                    alert("Error Uploading");
+                    console.log(textStatus, errorThrown);
                 },
                 success: function(data) {
                     if (data.correct == "salah") {
                         $("#message_nama_product").html(data.message_nama_product);
                         $("#message_harga").html(data.message_harga);
                         $("#message_kategori").html(data.message_kategori);
-                        $("#message_userfile").html(data.message_userfile);
+                        if (pict == "") {
+                            $("#message_gambar").html("You did not select a file to upload.");
+                        } else {
+                            $("#message_gambar").html(data.message_gambar);
+                        }
                     } else {
                         alert(data.message1);
                         $("#message_nama_product").html("");
                         $("#message_harga").html("");
                         $("#message_kategori").html("");
-                        $("#message_userfile").html("")
+                        $("#message_gambar").html("")
                         $("#productForm")[0].reset();
                     }
                     actSimpan.button('reset');
                 }
-            }
-//            ).fail(function(data) {
-//                console.log(data)
-//                actSimpan.button('reset');
-//            }
-            );
-        }
-
+            });
+            return false;
+        });
+    });
 </script>
