@@ -14,21 +14,62 @@ class Product_model extends CI_Model {
         $data['nama_product_seo'] = seo_title($this->input->post('nama_product'));
         $data['harga'] = $this->input->post('harga');
         $data['kategori_id'] = $this->input->post('kategori');
-        $data['picture'] = $picture;
+        $data['picture'] = $picture['file_name'];
         $query = $this->db->get_where('product', array('nama_product' => $data['nama_product']));
         if ($query->num_rows() > 0) {
-            $this->db->where('nama_product', $data['nama_product']);
-            $this->db->update('product', $data);
-            $pesan = array(
-                'message1' => 'data berhasil diupdate'
-            );
-            echo json_encode($pesan);
+            foreach ($query->result() as $row) {
+                $namagambar = $row->picture;
+                unlink('./pictures/' . $namagambar);
+                $this->db->where('nama_product', $data['nama_product']);
+                $this->db->update('product', $data);
+                $pesan = array(
+                    'message1' => 'data berhasil diupdate'
+                );
+                echo json_encode($pesan);
+            }
         } else {
             $this->db->insert('product', $data);
             $pesan = array(
                 'message1' => 'data berhasil disimpan'
             );
             echo json_encode($pesan);
+        }
+    }
+
+    function upload($picture, $product_id) {
+        $gambar = $picture['file_name'];
+        $query = $this->db->get_where('product', array('product_id' => $product_id));
+        foreach ($query->result() as $row) {
+            $namagambar = $row->picture;
+            unlink('./pictures/' . $namagambar);
+            $query = "UPDATE product SET picture = '$gambar' WHERE product_id = '$product_id' ";
+            $this->db->query($query);
+            echo 'data berhasil diupdate';
+        }
+    }
+
+    function update($picture) {
+        $product_id = $this->uri->segment(4);
+        if ($picture == null) {
+            $this->db->where('product_id', $product_id);
+            $this->db->update('product', $data);
+            $pesan = array(
+                'message1' => 'data berhasil diupdate'
+            );
+            echo json_encode($pesan);
+        } else {
+            $data['picture'] = $picture['file_name'];
+            $query = $this->db->get_where('product', array('product_id' => $product_id));
+            foreach ($query->result() as $row) {
+                $namagambar = $row->picture;
+                unlink('./pictures/' . $namagambar);
+                $this->db->where('product_id', $product_id);
+                $this->db->update('product', $data);
+                $pesan = array(
+                    'message1' => 'data berhasil diupdate'
+                );
+                echo json_encode($pesan);
+            }
         }
     }
 
@@ -42,3 +83,4 @@ class Product_model extends CI_Model {
     }
 
 }
+
