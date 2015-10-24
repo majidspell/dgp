@@ -1,9 +1,11 @@
-<body onload="loadForm();"></body>
+<body onload="loadForm();
+        return false;"></body>
 
 <div class="box box-primary">
     <div class="box-body">
         <div class="col-xs-7">
-            <form role="form" id="productForm">
+            <form role="form" id="productForm" onsubmit="simpanProduct();
+        return false;">
                 <input type="hidden" name="product_id" id="product_id" value="<?php echo $row['product_id']; ?>">
                 <div class="box-body">
                     <div class="form-group">
@@ -77,16 +79,15 @@
 <script src="<?php echo base_url() ?>assets/js/jquery.form.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     function loadForm() {
-        var gambarUpload = $("#gambarUpload").val();
+        var idUpload = $("#idUpload").val();
         $.ajax({
             type: 'post',
             url: "<?php echo site_url(); ?>admin/product/refresh",
-            data: "gambarUpload=" + gambarUpload,
+            data: "idUpload=" + idUpload,
             success: function(html) {
                 $("#refresh").html(html);
-            }            
+            }
         });
-        return false;
     }
     ///////////////setdefault combobox////////////////////////
     var setnilai = $("#setnilai").val();
@@ -119,19 +120,49 @@
                     console.log(textStatus, errorThrown);
                 },
                 success: function() {
-                    alert('Upload success');
+                    loadForm();
                     $("#message_gambar").html("")
                     $("#productFormUpload")[0].reset();
                     $(".progress").hide();
                 },
                 complete: function(response) {
-                    loadForm();
+                    alert('Upload success');
                 }
             });
 
 
         });
     });
+
+    function simpanProduct() {
+        var product_id = $("#product_id").val();
+        var nama_product = $("#nama_product").val();
+        var harga = $("#harga").val();
+        var kategori = $("#kategori").val();
+        var actSimpan = $(".act-simpan");
+        actSimpan.button('loading');
+        $.ajax({
+            url: "<?php echo site_url(); ?>admin/product/update",
+            type: "post",
+            data: "&product_id=" + product_id +"&nama_product=" + nama_product + "&harga=" + harga + "&kategori=" + kategori,
+            dataType: "json",
+            success: function(data) {
+                if (data.correct == "salah") {
+                    $("#message_nama_product").html(data.message_nama_product);
+                    $("#message_harga").html(data.message_harga);
+                    $("#message_kategori").html(data.message_kategori);
+                } else {
+                    alert(data.message1);
+                    $("#message_nama_product").html("");
+                    $("#message_harga").html("");
+                    $("#message_kategori").html("");
+                }
+                actSimpan.button('reset');
+            }
+        }
+        );
+    }
+
 
 //    jQuery(document).ready(function() {
 //        jQuery("#productForm").submit(function() {
