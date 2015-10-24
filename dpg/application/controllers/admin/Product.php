@@ -16,6 +16,15 @@ class Product extends CI_Controller {
         $this->form_validation->set_rules('nama_product', 'Nama_product', 'trim|required');
         $this->form_validation->set_rules('harga', 'Harga', 'trim|required|numeric');
         $this->form_validation->set_rules('kategori', 'Kategori', 'required');
+    }
+
+    function add() {
+        $data['kategori'] = $this->kategori_model->select_all()->result();
+        $this->template->load('dashboard', 'admin/product/add', $data);
+    }
+
+    function insert() {
+        $this->validation_product();
         $config = array(
             'upload_path' => './pictures/',
             'allowed_types' => 'gif|jpg|png', // Jenis file yang di ijinkan
@@ -30,15 +39,6 @@ class Product extends CI_Controller {
             'remove_spaces' => TRUE
         );
         $this->upload->initialize($config);
-    }
-
-    function add() {
-        $data['kategori'] = $this->kategori_model->select_all()->result();
-        $this->template->load('dashboard', 'admin/product/add', $data);
-    }
-
-    function insert() {
-        $this->validation_product();
         if ($this->form_validation->run() == TRUE && $this->upload->do_upload("gambar")) {
             $hasil = $this->upload->data(); //Menampilkan pesan sukses  
             $this->product_model->insert($hasil);
@@ -64,17 +64,14 @@ class Product extends CI_Controller {
 
     function update() {
         $this->validation_product();
-        if ($this->form_validation->run() == TRUE && $this->upload->do_upload("gambar")) {
-            $hasil = $this->upload->data(); //Menampilkan pesan sukses  
-            $this->product_model->update($hasil);
-        } else {
-            $hasil = $this->upload->display_errors(); //Menampilkan pesan error
+        if ($this->form_validation->run() == TRUE) {
+            $this->product_model->update();
+        } else {           
             $data = array(
                 'correct' => 'salah',
                 'message_nama_product' => form_error('nama_product'),
                 'message_harga' => form_error('harga'),
-                'message_kategori' => form_error('kategori'),
-                'message_gambar' => $hasil
+                'message_kategori' => form_error('kategori')
             );
             echo json_encode($data);
         }
@@ -106,8 +103,12 @@ class Product extends CI_Controller {
     }
 
     function refresh() {
-        $gambarUpload = $this->input->post('gambarUpload');
-        echo "<img src='" . base_url() . "pictures/" . $gambarUpload . "' width='134px' height='134px' alt='no image found'/>";
+        $id = $this->input->post('idUpload');
+        $data = $this->product_model->getProductById($id);
+        foreach ($data->result() as $row) {
+            $namagambar = $row->picture;
+            echo "<img src='" . base_url() . "pictures/" . $namagambar . "' width='134px' height='134px' alt='no image found' class ='img-rounded'/>";
+        }
     }
 
     function delete() {
