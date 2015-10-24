@@ -9,6 +9,14 @@ class Product_model extends CI_Model {
         return $this->db->query($query);
     }
 
+    function getProductById($id) {
+        $query = "SELECT product.product_id, product.nama_product,
+            product.nama_product_seo, product.harga, product.picture, kategori.nama_kategori
+            FROM product, kategori
+            WHERE product.kategori_id = kategori.kategori_id && product.product_id='$id'";
+        return $this->db->query($query);
+    }
+
     function insert($picture) {
         $data['nama_product'] = $this->input->post('nama_product');
         $data['nama_product_seo'] = seo_title($this->input->post('nama_product'));
@@ -48,29 +56,45 @@ class Product_model extends CI_Model {
         }
     }
 
-    function update($picture) {
-        $product_id = $this->uri->segment(4);
-        if ($picture == null) {
-            $this->db->where('product_id', $product_id);
-            $this->db->update('product', $data);
-            $pesan = array(
-                'message1' => 'data berhasil diupdate'
-            );
-            echo json_encode($pesan);
-        } else {
-            $data['picture'] = $picture['file_name'];
-            $query = $this->db->get_where('product', array('product_id' => $product_id));
-            foreach ($query->result() as $row) {
-                $namagambar = $row->picture;
-                unlink('./pictures/' . $namagambar);
-                $this->db->where('product_id', $product_id);
-                $this->db->update('product', $data);
-                $pesan = array(
-                    'message1' => 'data berhasil diupdate'
-                );
-                echo json_encode($pesan);
-            }
-        }
+    function update() {
+        $id = $this->input->post('product_id');
+        $data['nama_product'] = $this->input->post('nama_product');
+        $data['nama_product_seo'] = seo_title($this->input->post('nama_product'));
+        $data['harga'] = $this->input->post('harga');
+        $data['kategori_id'] = $this->input->post('kategori');
+
+        //update tanpa gambar
+
+        $this->db->where('product_id', $id);
+        $this->db->update('product', $data);
+
+        $pesan = array(
+            'message1' => 'data berhasil diupdate'
+        );
+        echo json_encode($pesan);
+
+
+        //        if ($picture == null) {
+//            $this->db->where('product_id', $product_id);
+//            $this->db->update('product', $data);
+//            $pesan = array(
+//                'message1' => 'data berhasil diupdate'
+//            );
+//            echo json_encode($pesan);
+//        } else {
+//            $data['picture'] = $picture['file_name'];
+//            $query = $this->db->get_where('product', array('product_id' => $product_id));
+//            foreach ($query->result() as $row) {
+//                $namagambar = $row->picture;
+//                unlink('./pictures/' . $namagambar);
+//                $this->db->where('product_id', $product_id);
+//                $this->db->update('product', $data);
+//                $pesan = array(
+//                    'message1' => 'data berhasil diupdate'
+//                );
+//                echo json_encode($pesan);
+//            }
+//        }
     }
 
     function delete($id) {
